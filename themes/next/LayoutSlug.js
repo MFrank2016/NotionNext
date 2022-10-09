@@ -8,9 +8,18 @@ import TocDrawer from './components/TocDrawer'
 import { useRef } from 'react'
 import CONFIG_NEXT from './config_next'
 import { ArticleLock } from './components/ArticleLock'
+import { isBrowser } from '@/lib/utils'
 
 export const LayoutSlug = (props) => {
   const { post, latestPosts, lock, validPassword } = props
+  if (!post) {
+    return <LayoutBase
+      {...props}
+      rightAreaSlot={
+        CONFIG_NEXT.RIGHT_LATEST_POSTS && <Card><LatestPostsGroup posts={latestPosts} /></Card>
+      }
+    />
+  }
 
   if (!lock && post?.blockMap?.block) {
     post.content = Object.keys(post.blockMap.block)
@@ -18,7 +27,7 @@ export const LayoutSlug = (props) => {
   }
 
   const drawerRight = useRef(null)
-  const targetRef = typeof window !== 'undefined' ? document.getElementById('container') : null
+  const targetRef = isBrowser() ? document.getElementById('container') : null
   const floatSlot = post?.toc?.length > 1
     ? <div className='block lg:hidden'><TocDrawerButton onClick={() => {
       drawerRight?.current?.handleSwitchVisible()

@@ -33,14 +33,24 @@ const BlogPostCard = ({ post, showSummary }) => {
             >
               <a className="font-light hover:underline cursor-pointer text-sm leading-4 mr-3">
                 <i className="far fa-calendar-alt mr-1" />
-                {post.date.start_date}
+                {post.date?.start_date || post.lastEditedTime}
               </a>
             </Link>
           </div>
 
-          {(!showPreview || showSummary) && (
-            <p className="replace my-4 text-gray-700  dark:text-gray-300 text-sm font-light leading-7">
+          {(!showPreview || showSummary) && !post.results && (
+            <p style={{ overflow: 'hidden', textOverflow: 'ellipsis', display: '-webkit-box', WebkitLineClamp: '4', WebkitBoxOrient: 'vertical' }}
+              className="replace h-full max-h-32 my-4 text-gray-700  dark:text-gray-300 text-sm font-light leading-7">
               {post.summary}
+            </p>
+          )}
+
+          {/* 搜索结果 */}
+          {post.results && (
+            <p className="mt-4 text-gray-700 dark:text-gray-300 text-sm font-light leading-7">
+              {post.results.map(r => (
+                <span key={r}>{r}</span>
+              ))}
             </p>
           )}
 
@@ -68,14 +78,14 @@ const BlogPostCard = ({ post, showSummary }) => {
           </div>
         </div>
 
-        {CONFIG_HEXO.POST_LIST_COVER && !showPreview && post?.page_cover && (
+        {CONFIG_HEXO.POST_LIST_COVER && !showPreview && post?.page_cover && !post.results && (
           <Link href={`${BLOG.SUB_PATH}/article/${post.slug}`} passHref>
             <div className="flex w-full relative duration-200 rounded-t-xl lg:rounded-r-xl lg:rounded-t-none cursor-pointer transform overflow-hidden">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src={post?.page_cover}
                 alt={post.title}
-                className="hover:scale-125 rounded-t-xl lg:rounded-r-xl lg:rounded-t-none transform object-cover duration-500"
+                className="max-h-52 lg:max-h-72 w-full hover:scale-125 rounded-t-xl lg:rounded-r-xl lg:rounded-t-none transform object-cover duration-500"
               />
               {/* <Image className='hover:scale-125 rounded-t-xl lg:rounded-r-xl lg:rounded-t-none transform duration-500' src={post?.page_cover} alt={post.title} layout='fill' objectFit='cover' loading='lazy' /> */}
             </div>

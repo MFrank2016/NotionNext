@@ -1,5 +1,4 @@
 import Comment from '@/components/Comment'
-import Image from 'next/image'
 import Link from 'next/link'
 import ArticleAround from './ArticleAround'
 import CategoryItem from './CategoryItem'
@@ -9,13 +8,14 @@ import formatDate from '@/lib/formatDate'
 import { useGlobal } from '@/lib/global'
 import BLOG from '@/blog.config'
 import NotionPage from '@/components/NotionPage'
+import React from 'react'
 
 export const ArticleDetail = props => {
-  const { post, prev, next } = props
+  const { post, prev, next, siteInfo } = props
   const { locale } = useGlobal()
 
   const date = formatDate(
-    post?.date?.start_date || post.createdTime,
+    post?.date?.start_date || post?.createdTime,
     locale.LOCALE
   )
   return <div id='container'>
@@ -23,14 +23,10 @@ export const ArticleDetail = props => {
     <section className="flex py-4 items-center font-sans px-1">
       <Link href="/about" passHref>
         <>
-          <Image
-            alt={BLOG.AUTHOR}
-            width={25}
-            height={25}
-            loading="lazy"
-            src="/avatar.jpg"
-            className="rounded-full cursor-pointer"
-          />
+
+         {/* eslint-disable-next-line @next/next/no-img-element */}
+         <img src={siteInfo?.icon} className='rounded-full cursor-pointer' width={25}/>
+
           <div className="mr-3 ml-1 text-green-500 cursor-pointer">
             {BLOG.AUTHOR}
           </div>
@@ -48,7 +44,7 @@ export const ArticleDetail = props => {
     </section>
     {/* Notion文章主体 */}
     <section id="notion-article" className="px-1 max-w-5xl">
-      {post.blockMap && (<NotionPage post={post} />)}
+      {post && (<NotionPage post={post} />)}
     </section>
 
     <section className="px-1 py-2 my-1 text-sm font-light overflow-auto text-gray-600  dark:text-gray-400">
