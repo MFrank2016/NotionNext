@@ -11,7 +11,8 @@ let autoScroll = false
  *
  * @returns 头图
  */
-export default function Header () {
+export default function Header(props) {
+  const { siteInfo } = props
   const [typed, changeType] = useState()
   useEffect(() => {
     if (!typed && window && document.getElementById('typed')) {
@@ -26,7 +27,7 @@ export default function Header () {
         })
       )
     }
-  })
+  }, [])
   const { isDarkMode } = useGlobal()
 
   const autoScrollEnd = () => {
@@ -71,12 +72,10 @@ export default function Header () {
     }
   }
 
-  function updateHeaderHeight () {
+  function updateHeaderHeight() {
     setTimeout(() => {
-      if (window) {
-        const wrapperElement = document.getElementById('wrapper')
-        wrapperTop = wrapperElement.offsetTop
-      }
+      const wrapperElement = document.getElementById('wrapper')
+      wrapperTop = wrapperElement.offsetTop
     }, 500)
   }
 
@@ -89,7 +88,7 @@ export default function Header () {
       window.removeEventListener('scroll', scrollTrigger)
       window.removeEventListener('resize', updateHeaderHeight)
     }
-  })
+  }, [])
 
   return (
     <header
@@ -97,11 +96,11 @@ export default function Header () {
       className="duration-500 md:bg-fixed w-full bg-cover bg-center h-screen bg-black"
       style={{
         backgroundImage:
-          `linear-gradient(rgba(0, 0, 0, 0.8), rgba(0,0,0,0.2), rgba(0, 0, 0, 0.8) ),url("${CONFIG_NEXT.HOME_BANNER_IMAGE}")`
+          `linear-gradient(rgba(0, 0, 0, 0.8), rgba(0,0,0,0.2), rgba(0, 0, 0, 0.8) ),url("${siteInfo?.pageCover}")`
       }}
     >
       <div className="absolute flex h-full items-center lg:-mt-14 justify-center w-full text-4xl md:text-7xl text-white">
-        <div id='typed' className='flex text-center font-serif'/>
+        <div id='typed' className='flex text-center font-serif' />
       </div>
       <div
         onClick={() => {
@@ -109,7 +108,7 @@ export default function Header () {
         }}
         className="cursor-pointer w-full text-center py-4 text-5xl absolute bottom-10 text-white"
       >
-        <i className='animate-bounce fas fa-angle-down'/>
+        <i className='animate-bounce fas fa-angle-down' />
       </div>
     </header>
   )

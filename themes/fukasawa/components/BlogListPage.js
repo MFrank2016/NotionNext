@@ -17,9 +17,11 @@ const BlogListPage = ({ page = 1, posts = [], postCount }) => {
   const showNext = page < totalPage && posts.length === BLOG.POSTS_PER_PAGE && posts.length < postCount
   const [colCount, changeCol] = useState(1)
 
-  function updateCol () {
+  function updateCol() {
     if (window.outerWidth > 1200) {
       changeCol(3)
+    } else if (window.outerWidth > 900) {
+      changeCol(2)
     } else {
       changeCol(1)
     }
@@ -40,7 +42,7 @@ const BlogListPage = ({ page = 1, posts = [], postCount }) => {
       <div id="container">
         {/* 文章列表 */}
         <div style={{ columnCount: colCount }}>
-          {posts.map(post => (
+          {posts?.map(post => (
             <div key={post.id} className='justify-center flex' style={{ breakInside: 'avoid' }}>
               <BlogCard key={post.id} post={post} />
             </div>
